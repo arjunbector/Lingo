@@ -17,7 +17,7 @@ const Header = () => {
       <div className="mx-auto flex h-full items-center justify-between lg:max-w-screen-lg">
         <div className="flex items-center gap-x-2 pb-7 pl-4 pt-8">
           <Image src={logo} height={40} width={40} alt="duolingo" />
-          <h1 className="text-xl font-bold tracking-wide text-green-500">
+          <h1 className="text-xl font-extrabold tracking-wide text-green-600">
             Lingo
           </h1>
         </div>
