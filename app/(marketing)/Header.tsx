@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "@/public/fullLogo.svg";
+import logo from "@/public/mascot.svg";
 import {
   ClerkLoaded,
   ClerkLoading,

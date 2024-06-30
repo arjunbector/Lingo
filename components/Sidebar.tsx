@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import logo from "@/public/fullLogo.svg";
+import logo from "@/public/mascot.svg";
 import Image from "next/image";
 import Link from "next/link";
 import SidebarItem from "./SidebarItem";

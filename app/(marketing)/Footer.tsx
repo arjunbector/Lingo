@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Spanish from "@/public/flags/Spanish.svg";
-import Crotian from "@/public/flags/Crotian.svg";
+import Croatian from "@/public/flags/Croatian.svg";
 import French from "@/public/flags/French.svg";
 import Italian from "@/public/flags/Italian.svg";
 import Japanese from "@/public/flags/Japanese.svg";
@@ -22,13 +22,13 @@ const Footer = () => {
         </Button>
         <Button size="lg" variant="ghost" className="w-full">
           <Image
-            src={Crotian}
-            alt="Crotian"
+            src={Croatian}
+            alt="Croatian"
             height={32}
             width={40}
             className="mr-4 rounded-md"
           />
-          Crotian
+          Croatian
         </Button>
         <Button size="lg" variant="ghost" className="w-full">
           <Image
