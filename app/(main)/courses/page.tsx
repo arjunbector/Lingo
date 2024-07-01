@@ -1,5 +1,5 @@
 import List from "./List";
-import { getCourses, getUserProgress } from "./queries";
+import { getCourses, getUnits, getUserProgress } from "./queries";
 
 const Page = async () => {
   const userProgressData = getUserProgress();
