@@ -1,7 +1,7 @@
 import StickyWrapper from "@/components/StickyWrapper";
 import UserProgress from "@/components/UserProgress";
 import { redirect } from "next/navigation";
-import { getUserProgress } from "../courses/queries";
+import { getUserProgress, getUserSubscription } from "../courses/queries";
 import FeedWrapper from "@/components/FeedWrapper";
 import Image from "next/image";
 import Items from "./Items";
@@ -11,10 +11,15 @@ import Link from "next/link";
 
 const Page = async () => {
   const userProgressData = getUserProgress();
-  const [userProgress] = await Promise.all([userProgressData]);
+  const userSubscriptionData = getUserSubscription();
+  const [userProgress, userSubscription] = await Promise.all([
+    userProgressData,
+    userSubscriptionData,
+  ]);
   if (!userProgress || !userProgress.activeCourse) {
     redirect("/courses");
   }
+  const isPro = !!userSubscription?.isActive
   return (
     <main className="flex flex-row-reverse gap-[48px] px-6">
       <StickyWrapper>
@@ -22,7 +27,7 @@ const Page = async () => {
           activeCourse={userProgress?.activeCourse}
           hearts={userProgress?.hearts}
           points={userProgress?.points}
-          hasActiveSubscription={false}
+          hasActiveSubscription={isPro}
         />
       </StickyWrapper>
       <FeedWrapper>
@@ -37,7 +42,7 @@ const Page = async () => {
           <Items
             points={userProgress.points}
             hearts={userProgress.hearts}
-            hasActiveSubscription={false}
+            hasActiveSubscription={isPro}
           />
         </div>
       </FeedWrapper>

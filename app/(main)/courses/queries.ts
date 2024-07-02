@@ -8,6 +8,7 @@ import { Course } from "@/models/course.model";
 import { Lesson } from "@/models/lesson.model";
 import { Unit } from "@/models/unit.model";
 import { UserProgress } from "@/models/userProgress.model";
+import { UserSubscription } from "@/models/userSubscription.model";
 import { auth } from "@clerk/nextjs/server";
 import { cache } from "react";
 
@@ -176,4 +177,16 @@ export const getLessonPercentage = cache(async () => {
     )
     console.log(lesson.challenges);
     return percentage;
+})
+
+const DAY_IN_MS = 86_400_000;
+export const getUserSubscription = cache(async () => {
+    const { userId } = await auth();
+    if (!userId) return null;
+    const data = await UserSubscription.findOne({ userId: userId })
+    if (!data) return null;
+    const isActive = data.stripePriceId && data.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now();
+    return {
+        ...data.toObject(), isActive: !!isActive
+    }
 })
