@@ -3,11 +3,12 @@
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { reduceHearts } from "@/actions/user-progress";
 import { useHeartsModal } from "@/store/use-herts-model";
+import { usePracticeModal } from "@/store/use-practice-modal";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Confetti from "react-confetti";
-import { useAudio, useWindowSize } from "react-use";
+import { useAudio, useMount, useWindowSize } from "react-use";
 import { toast } from "sonner";
 import Challenge from "./Challenge";
 import Footer from "./Footer";
@@ -32,7 +33,16 @@ const Quiz = ({
 }: Props) => {
   const { height, width } = useWindowSize();
   const router = useRouter();
+
   const { open: openHeartsModal } = useHeartsModal();
+  const { open: openPracticeModal } = usePracticeModal();
+
+  useMount(() => {
+    if (initialPercentage === 100) {
+      //practice lesson
+      openPracticeModal();
+    }
+  });
 
   const [finishAudio] = useAudio({ src: "/finish.wav", autoPlay: true });
   const [correctAudio, _c, correctControls] = useAudio({ src: "/correct.wav" });
@@ -44,7 +54,9 @@ const Quiz = ({
 
   const [lessonId] = useState(initialLessonId);
   const [hearts, setHearts] = useState(initialHearts);
-  const [percentage, setPercentage] = useState(initialPercentage);
+  const [percentage, setPercentage] = useState(() => {
+    return initialPercentage === 100 ? 0 : initialPercentage; //if practice -> 0
+  });
   const [challenges] = useState(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState(() => {
     const uncompletedIndex = challenges.findIndex(
