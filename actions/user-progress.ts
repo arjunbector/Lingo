@@ -8,6 +8,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+const POINTS_TO_REFILL_HEARTS = 10;
 
 export const upsertUserProgress = async (courseId: string) => {
     await connectToDB();
@@ -57,7 +58,7 @@ export const reduceHearts = async (challengeId: string) => {
     const existingChallengeProgress = await ChallengeProgress.findOne({ userId, challengeId });
     const isPractice = !!existingChallengeProgress;
     if (isPractice) return { error: "practice" }
-    if (!currentUserProgress) return new Error("No user progress found");
+    if (!currentUserProgress) throw new Error("No user progress found");
 
     console.log("current hearts = ", currentUserProgress.hearts)
     if (currentUserProgress.hearts = 0) {
@@ -83,4 +84,18 @@ export const reduceHearts = async (challengeId: string) => {
     revalidatePath("/quests")
     revalidatePath("/leaderboard")
     // revalidatePath(`/lesson/${lessonId}`)
+}
+
+export const refillHearts = async () => {
+    const currentUserProgress = await getUserProgress();
+    if (!currentUserProgress) throw new Error("No user progress found");
+    if (currentUserProgress.hearts === 5) throw new Error("Hearts already full");
+    if (currentUserProgress.points < POINTS_TO_REFILL_HEARTS) throw new Error("Not enough points to refill hearts");
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+    await UserProgress.updateOne({ userId: userId }, { $set: { hearts: 5 }, $inc: { points: -POINTS_TO_REFILL_HEARTS } });
+    revalidatePath("/learn");
+    revalidatePath("/shop");
+    revalidatePath("/quests");
+    revalidatePath("/leaderboard");
 }
