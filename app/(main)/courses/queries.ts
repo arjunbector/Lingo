@@ -190,3 +190,10 @@ export const getUserSubscription = cache(async () => {
         ...data.toObject(), isActive: !!isActive
     }
 })
+
+export const getTopTenUsers = cache(async () => {
+    const {userId} = await auth();
+    if(!userId) return [];
+    const data = await UserProgress.find().sort({ points: -1 }).limit(10);
+    return data;
+})
