@@ -1,11 +1,11 @@
 "use client";
 
+import { upsertUserProgress } from "@/actions/user-progress";
 import { ICourse } from "@/models/course.model";
-import Card from "./Card";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { upsertUserProgress } from "@/actions/user-progress";
 import { toast } from "sonner";
+import Card from "./Card";
 
 type Props = {
   courses: ICourse[];
@@ -20,6 +20,7 @@ const List = ({ courses, activeCourseId }: Props) => {
     if (id === activeCourseId) return router.push("/learn");
     startTransition(() => {
       upsertUserProgress(id).catch(() => {
+        router.push("/")
         toast.error("Something went wrong.");
       });
     });
