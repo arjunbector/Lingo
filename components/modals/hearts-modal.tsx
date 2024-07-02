@@ -16,7 +16,7 @@ const HeartsModal = () => {
   const router = useRouter();
   const onClick = () => {
     close();
-    router.push("/store");
+    router.push("/shop");
   };
   const [isClient, setIsClient] = useState(false);
   const { isOpen, close } = useHeartsModal();
@@ -53,6 +53,14 @@ const HeartsModal = () => {
               onClick={onClick}
             >
               Get Unlimited Hearts
+            </Button>
+            <Button
+              variant="primary"
+              className="w-full"
+              size="lg"
+              onClick={onClick}
+            >
+              Exchange your XP for hearts
             </Button>
             <Button
               variant="primaryOutline"

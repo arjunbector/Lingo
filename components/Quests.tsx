@@ -17,7 +17,7 @@ const Quests = ({ points }: Props) => {
         </Link>
       </div>
       <ul className="w-full space-y-2">
-        {QUESTS.map((quest) => {
+        {QUESTS.slice(0,3).map((quest) => {
           const progress = (points / quest.value) * 100;
           return (
             <div
