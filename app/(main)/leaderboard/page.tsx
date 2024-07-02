@@ -10,6 +10,8 @@ import {
   getUserProgress,
   getUserSubscription,
 } from "../courses/queries";
+import Promo from "@/components/Promo";
+import Quests from "@/components/Quests";
 
 const Page = async () => {
   const userProgressData = getUserProgress();
@@ -34,6 +36,8 @@ const Page = async () => {
           points={userProgress?.points}
           hasActiveSubscription={isPro}
         />
+        {!isPro && <Promo />}
+        <Quests points={userProgress?.points}/>
       </StickyWrapper>
       <FeedWrapper>
         <div className="mt-6 flex w-full flex-col items-center">

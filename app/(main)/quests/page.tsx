@@ -6,29 +6,10 @@ import { redirect } from "next/navigation";
 import { getUserProgress, getUserSubscription } from "../courses/queries";
 import { Zap, Check } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import Promo from "@/components/Promo";
+import { QUESTS } from "@/constants/constants";
 
-const QUESTS = [
-  {
-    title: "Earn 20 XP",
-    value: 20,
-  },
-  {
-    title: "Earn 50 XP",
-    value: 50,
-  },
-  {
-    title: "Earn 100 XP",
-    value: 100,
-  },
-  {
-    title: "Earn 500 XP",
-    value: 500,
-  },
-  {
-    title: "Earn 1000 XP",
-    value: 1000,
-  },
-];
+
 const Page = async () => {
   const userProgressData = getUserProgress();
   const userSubscriptionData = getUserSubscription();
@@ -50,6 +31,7 @@ const Page = async () => {
           points={userProgress?.points}
           hasActiveSubscription={isPro}
         />
+        {!isPro && <Promo />}
       </StickyWrapper>
       <FeedWrapper>
         <div className="mt-6 flex w-full flex-col items-center">
