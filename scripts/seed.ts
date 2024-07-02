@@ -5,6 +5,7 @@ import { Course } from "@/models/course.model";
 import { Lesson } from "@/models/lesson.model";
 import { Unit } from "@/models/unit.model";
 import { UserProgress } from "@/models/userProgress.model";
+import { UserSubscription } from "@/models/userSubscription.model";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 dotenv.config();
@@ -47,6 +48,7 @@ async function main() {
         await Challenge.collection.drop();
         await ChallengeOptions.collection.drop();
         await ChallengeProgress.collection.drop();
+        await UserSubscription.collection.drop();
 
         await Course.insertMany(COURSES);
         const courses = await Course.find();

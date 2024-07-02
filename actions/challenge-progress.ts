@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserProgress } from "@/app/(main)/courses/queries";
+import { getUserProgress, getUserSubscription } from "@/app/(main)/courses/queries";
 import { Challenge } from "@/models/challenge.model";
 import { ChallengeProgress } from "@/models/challengeProgress.model";
 import { UserProgress } from "@/models/userProgress.model";
@@ -12,6 +12,7 @@ export const upsertChallengeProgress = async (challegeId: string) => {
     if (!userId) throw new Error("Unauthorized");
 
     const currentUserProgress = await getUserProgress();
+    const userSubscription = await getUserSubscription();
     if (!currentUserProgress) throw new Error("User progress not found");
 
     const challenge = await Challenge.findById(challegeId);
@@ -22,7 +23,7 @@ export const upsertChallengeProgress = async (challegeId: string) => {
 
     const isPratice = !!existingChallengeProgress
 
-    if (currentUserProgress.hearts === 0 && !isPratice) {
+    if (currentUserProgress.hearts === 0 && !isPratice && !userSubscription?.isActive) {
         return { error: "hearts" }
     }
     if (isPratice) {
@@ -33,7 +34,7 @@ export const upsertChallengeProgress = async (challegeId: string) => {
                 $inc: { points: 10, hearts: 0 }
             };
             if (userProgress.hearts < 5) {
-                updatedValues.$inc.hearts = 1; 
+                updatedValues.$inc.hearts = 1;
             }
             await UserProgress.updateOne({ userId: userId }, updatedValues);
         }

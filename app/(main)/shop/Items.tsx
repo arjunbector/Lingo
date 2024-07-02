@@ -3,6 +3,7 @@
 import { refillHearts } from "@/actions/user-progress";
 import { createStripeUrl } from "@/actions/user-subscription";
 import { Button } from "@/components/ui/button";
+import { POINTS_TO_REFILL_HEARTS } from "@/constants/constants";
 import { Heart, Zap } from "lucide-react";
 import Image from "next/image";
 import { useTransition } from "react";
@@ -14,7 +15,6 @@ type Props = {
   hasActiveSubscription: boolean;
 };
 
-const POINTS_TO_REFILL_HEARTS = 10;
 const Items = ({ hearts, points, hasActiveSubscription }: Props) => {
   const [pending, startTransition] = useTransition();
   const onRefillHearts = () => {

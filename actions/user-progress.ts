@@ -1,6 +1,7 @@
 "use server"
 
-import { getCourseById, getUserProgress } from "@/app/(main)/courses/queries";
+import { getCourseById, getUserProgress, getUserSubscription } from "@/app/(main)/courses/queries";
+import { POINTS_TO_REFILL_HEARTS } from "@/constants/constants";
 import connectToDB from "@/db/db";
 import { ChallengeProgress } from "@/models/challengeProgress.model";
 import { UserProgress } from "@/models/userProgress.model";
@@ -8,7 +9,6 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-const POINTS_TO_REFILL_HEARTS = 10;
 
 export const upsertUserProgress = async (courseId: string) => {
     await connectToDB();
@@ -49,6 +49,7 @@ export const reduceHearts = async (challengeId: string) => {
         throw new Error("Unauthorized");
     }
     const currentUserProgress = await getUserProgress();
+    const userSubscription = await getUserSubscription();
 
     // const challenge = await ChallengeProgress.findOne({ challengeId: challengeId });
     // if (!challenge) {
@@ -60,7 +61,7 @@ export const reduceHearts = async (challengeId: string) => {
     if (isPractice) return { error: "practice" }
     if (!currentUserProgress) throw new Error("No user progress found");
 
-    console.log("current hearts = ", currentUserProgress.hearts)
+    if (userSubscription?.isActive) throw new Error("subscription")
     if (currentUserProgress.hearts = 0) {
         const res = { error: "hearts" }
         console.log(res);

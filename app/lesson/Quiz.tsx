@@ -101,7 +101,9 @@ const Quiz = ({
           </h1>
           <div className="flex w-full items-center gap-x-4">
             <ResultCard variant="points" value={challenges.length * 10} />
-            <ResultCard variant="hearts" value={hearts} />
+            {!userSubscription?.isActive && (
+              <ResultCard variant="hearts" value={hearts} />
+            )}
           </div>
         </div>
         <Footer
@@ -195,7 +197,7 @@ const Quiz = ({
       <Header
         hearts={hearts}
         percentage={percentage}
-        hasActiveSubscription={!!userSubscription?.isAcive}
+        hasActiveSubscription={!!userSubscription?.isActive}
       />
       <div className="flex-1">
         <div className="flex h-full items-center justify-center">

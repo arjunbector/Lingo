@@ -43,8 +43,8 @@ export const getUnits = cache(async () => {
     const userProgress = await getUserProgress();
     if (!userId || !userProgress?.activeCourseId) return [];
     await connectToDB();
-    let data = await Unit.find({ courseId: userProgress.activeCourseId });
-    let lessons = await Lesson.find({ unitId: { $in: data.map(unit => unit._id) } });
+    let data = await Unit.find({ courseId: userProgress.activeCourseId }).sort({ order: 1 });
+    let lessons = await Lesson.find({ unitId: { $in: data.map(unit => unit._id) } }).sort({ order: 1 });
     // Fetch all challenges
     let challenges = await Challenge.find();
     // Fetch all challengeProgress entries for the specific userId
