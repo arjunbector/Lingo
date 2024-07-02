@@ -5,7 +5,7 @@ import { getUserProgress, getUserSubscription } from "../courses/queries";
 import FeedWrapper from "@/components/FeedWrapper";
 import Image from "next/image";
 import Items from "./Items";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Quests from "@/components/Quests";
@@ -20,7 +20,7 @@ const Page = async () => {
   if (!userProgress || !userProgress.activeCourse) {
     redirect("/courses");
   }
-  const isPro = !!userSubscription?.isActive
+  const isPro = !!userSubscription?.isActive;
   return (
     <main className="flex flex-row-reverse gap-[48px] px-6">
       <StickyWrapper>
@@ -30,7 +30,7 @@ const Page = async () => {
           points={userProgress?.points}
           hasActiveSubscription={isPro}
         />
-        <Quests points={userProgress?.points}/>
+        <Quests points={userProgress?.points} />
       </StickyWrapper>
       <FeedWrapper>
         <div className="mt-6 flex w-full flex-col items-center">
@@ -46,6 +46,17 @@ const Page = async () => {
             hearts={userProgress.hearts}
             hasActiveSubscription={isPro}
           />
+          <div className="flex w-full items-center gap-x-3 rounded-lg border-2 p-2 text-gray-400 mt-10">
+            <Info className="h-5 w-5 shrink-0" />
+            <div>
+              <p>
+                Payments are not made from actual cards. You can use{" "}
+                <span className="font-bold">4242 4242 4242 4242</span> as the
+                card number. Enter any future date and any CVC code to complete
+                the payment.
+              </p>
+            </div>
+          </div>
         </div>
       </FeedWrapper>
     </main>
