@@ -21,7 +21,7 @@ const ResultCard = ({ value, variant }: Props) => {
           { "bg-rose-500": variant === "hearts" },
         )}
       >
-        {variant === "hearts" ? "Hearts Left" : "Total XP"}
+        {variant === "hearts" ? "Hearts Left" : "Total XP earned"}
       </div>
       <div
         className={cn(

@@ -1,3 +1,5 @@
+"use client"
+import React, { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils";
 import Card from "./Card";
 
@@ -9,6 +11,7 @@ type Props = {
   disabled?: boolean;
   type: "ASSIST" | "SELECT";
 };
+
 const Challenge = ({
   options,
   onSelect,
@@ -17,6 +20,23 @@ const Challenge = ({
   disabled,
   type,
 }: Props) => {
+  // State to hold the shuffled options
+  const [shuffledOptions, setShuffledOptions] = useState<any[]>([]);
+
+  // Shuffle function using the Fisher-Yates (Durstenfeld) algorithm
+  const shuffleArray = (array: any[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+  };
+
+  // Shuffle options once on component mount
+  useEffect(() => {
+    setShuffledOptions(shuffleArray([...options]));
+  }, [options]);
+
   return (
     <div
       className={cn(
@@ -26,7 +46,7 @@ const Challenge = ({
           "grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]",
       )}
     >
-      {options.map((option, index) => (
+      {shuffledOptions.map((option, index) => (
         <Card
           key={option._id}
           id={option._id}
@@ -41,9 +61,7 @@ const Challenge = ({
           type={type}
         />
       ))}
-
     </div>
-    
   );
 };
 
