@@ -11,7 +11,7 @@ const ChallengeOptionCreate = () => {
   return (
     <Create>
       <SimpleForm>
-        <TextInput source="text" validate={[required()]} label="Question" />
+        <TextInput source="text" validate={[required()]} label="Text" />
         <BooleanInput source="correct" label="Is Correct" />
         <ReferenceInput source="challengeId" reference="challenges" />
         <TextInput source="imageSrc"label="Image Url" />
