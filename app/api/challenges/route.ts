@@ -20,11 +20,9 @@ export const POST = async (req: Request) => {
     if (!isAdmin())
         return new NextResponse("Unauthorized", { status: 401 })
     const body = await req.json();
-    console.log(body);
     await connectToDB();
 
     const challenge = new Challenge({ ...body });
     await challenge.save();
-    console.log("saved");
     return NextResponse.json({ ...challenge, id: challenge._id });
 }

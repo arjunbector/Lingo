@@ -1,5 +1,7 @@
+import { useAuth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 import List from "./List";
-import { getCourses, getUnits, getUserProgress } from "./queries";
+import { getCourses, getUserProgress } from "./queries";
 
 const Page = async () => {
   const userProgressData = getUserProgress();

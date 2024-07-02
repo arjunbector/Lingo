@@ -20,11 +20,9 @@ export const POST = async (req: Request) => {
     if (!isAdmin())
         return new NextResponse("Unauthorized", { status: 401 })
     const body = await req.json();
-    console.log(body);
     await connectToDB();
 
     const lesson = new Lesson({ ...body });
     await lesson.save();
-    console.log("saved");
     return NextResponse.json({ ...lesson, id: lesson._id });
 }

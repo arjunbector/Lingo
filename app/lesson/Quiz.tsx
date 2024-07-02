@@ -169,7 +169,6 @@ const Quiz = ({
       startTransition(() => {
         reduceHearts(challenge._id)
           .then((res) => {
-            console.log(res);
             //@ts-ignore
             if (res?.error === "hearts") {
               openHeartsModal();
@@ -189,7 +188,6 @@ const Quiz = ({
       });
     }
   };
-  console.log(activeIndex);
   return (
     <>
       {incorrectAudio}
