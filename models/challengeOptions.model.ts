@@ -23,4 +23,4 @@ const challengeOptionsSchema = new Schema({
         required: false
     }
 });
-export const ChallengeOptions = mongoose.model('ChallengeOptions', challengeOptionsSchema);
+export const ChallengeOptions = mongoose.models.ChallengeOptions || mongoose.model('ChallengeOptions', challengeOptionsSchema);

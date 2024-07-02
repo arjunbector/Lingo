@@ -18,4 +18,4 @@ const challengeProgressSchema = new Schema({
     }
 })
 
-export const challengeProgress = mongoose.models.ChallengeProgress || mongoose.model('ChallengeProgress', challengeProgressSchema);
+export const ChallengeProgress = mongoose.models.ChallengeProgress || mongoose.model('ChallengeProgress', challengeProgressSchema);

@@ -1,5 +1,6 @@
 import { Challenge } from "@/models/challenge.model";
 import { ChallengeOptions } from "@/models/challengeOptions.model";
+import { ChallengeProgress } from "@/models/challengeProgress.model";
 import { Course } from "@/models/course.model";
 import { Lesson } from "@/models/lesson.model";
 import { Unit } from "@/models/unit.model";
@@ -45,6 +46,7 @@ async function main() {
         await Lesson.collection.drop();
         await Challenge.collection.drop();
         await ChallengeOptions.collection.drop();
+        await ChallengeProgress.collection.drop();
 
         await Course.insertMany(COURSES);
         const courses = await Course.find();
@@ -98,6 +100,38 @@ async function main() {
                 order: 1,
                 question: `What is the Spanish word for "the man"?`,
             },
+            {
+                lessonId: lessons[0]._id, // Assuming this is for "nouns"
+                type: "SELECT",
+                order: 2,
+                question: `What is the Spanish word for "the woman"?`,
+            },
+            {
+                lessonId: lessons[0]._id, // Assuming this is for "nouns"
+                type: "SELECT",
+                order: 3,
+                question: `What is the Spanish word for "the apple"?`,
+            },
+            {
+                lessonId: lessons[0]._id,
+                type: "ASSIST",
+                order: 4,
+                question: `"The Man"`,
+            }
+        ]);
+        const verbChallenges = await Challenge.insertMany([
+            {
+                lessonId: lessons[1]._id, // Assuming this is for "verbs"
+                type: "SELECT",
+                order: 1,
+                question: `What is the Spanish word for "to eat"?`,
+            },
+            {
+                lessonId: lessons[1]._id, // Assuming this is for "verbs"
+                type: "SELECT",
+                order: 2,
+                question: `What is the Spanish word for "to run"?`,
+            },
         ]);
         const challenges = await Challenge.find();
         await ChallengeOptions.insertMany([
@@ -121,7 +155,76 @@ async function main() {
                 text: "el robot",
                 correct: false,
                 audioSrc: "/es_robot.mp3"
-            }
+            },
+            {
+                challengeId: challenges[1]._id, // Assuming this is the second question
+                imageSrc: "/woman.svg",
+                text: "la mujer",
+                correct: true,
+                audioSrc: "/es_woman.mp3"
+            },
+            {
+                challengeId: challenges[1]._id,
+                imageSrc: "/man.svg",
+                text: "el hombre",
+                correct: false,
+                audioSrc: "/es_man.mp3"
+            },
+            {
+                challengeId: challenges[2]._id, // Assuming this is the third question
+                imageSrc: "/apple.svg",
+                text: "la manzana",
+                correct: true,
+                audioSrc: "/es_apple.mp3"
+            },
+            {
+                challengeId: challenges[2]._id,
+                imageSrc: "/orange.svg",
+                text: "la naranja",
+                correct: false,
+                audioSrc: "/es_orange.mp3"
+            },
+            {
+                challengeId: challenges[3]._id,
+                audioSrc: "es_man.mp3",
+                text: "el hombre",
+                correct: true,
+            },
+            {
+                challengeId: challenges[3]._id,
+                audioSrc: "es_woman.mp3",
+                text: "la mujer",
+                correct: false,
+            },
+            {
+                challengeId: challenges[3]._id,
+                audioSrc: "es_robot.mp3",
+                text: "el robot",
+                correct: false,
+            },
+            {
+                challengeId: verbChallenges[0]._id,
+                text: "comer",
+                correct: true,
+            },
+            {
+                challengeId: verbChallenges[0]._id,
+                text: "correr",
+                correct: false,
+            },
+            // Add more incorrect options as needed
+
+            // Options for "to run"
+            {
+                challengeId: verbChallenges[1]._id,
+                text: "correr",
+                correct: true,
+            },
+            {
+                challengeId: verbChallenges[1]._id,
+                text: "comer",
+                correct: false,
+            },
         ]);
 
         console.log('Courses seeded');

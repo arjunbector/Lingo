@@ -18,7 +18,6 @@ const UserProgress = ({
   points,
   hasActiveSubscription,
 }: Props) => {
-  console.log(activeCourse.imageSrc);
   return (
     <div className="flex w-full items-center justify-between gap-x-2">
       <Link href="/courses">

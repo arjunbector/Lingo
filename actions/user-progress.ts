@@ -2,8 +2,10 @@
 
 import { getCourseById, getUserProgress } from "@/app/(main)/courses/queries";
 import connectToDB from "@/db/db";
+import { ChallengeProgress } from "@/models/challengeProgress.model";
 import { UserProgress } from "@/models/userProgress.model";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -14,7 +16,6 @@ export const upsertUserProgress = async (courseId: string) => {
     if (!userId || !user) {
         throw new Error("Unauthorized");
     }
-    console.log("UserID:", userId); // Debugging log to confirm userId value
 
     const course = await getCourseById(courseId);
     if (!course) {
@@ -28,7 +29,6 @@ export const upsertUserProgress = async (courseId: string) => {
         revalidatePath("/learn")
         redirect("/learn")
     } else {
-        console.log("Creating new user progress for userId:", userId); // Additional log for debugging
         const userProgress = new UserProgress({
             userId: userId, // Confirm this matches the model's expectation
             activeCourseId: courseId,
@@ -36,9 +36,51 @@ export const upsertUserProgress = async (courseId: string) => {
             userImageSrc: user.imageUrl || "/mascot.svg",
         });
         await userProgress.save();
-        console.log("User progress saved:", userProgress);
         revalidatePath("/courses")
         revalidatePath("/learn")
         redirect("/learn")
     }
+}
+
+export const reduceHearts = async (challengeId: string) => {
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+    const currentUserProgress = await getUserProgress();
+
+    // const challenge = await ChallengeProgress.findOne({ challengeId: challengeId });
+    // if (!challenge) {
+    //     throw new Error("Challenge not found");
+    // }
+    // const lessonId = challenge.lessonId;
+    const existingChallengeProgress = await ChallengeProgress.findOne({ userId, challengeId });
+    const isPractice = !!existingChallengeProgress;
+    if (isPractice) return { error: "practice" }
+    if (!currentUserProgress) return new Error("No user progress found");
+
+    console.log("current hearts = ", currentUserProgress.hearts)
+    if (currentUserProgress.hearts = 0) {
+        const res = { error: "hearts" }
+        console.log(res);
+        return res;
+    }
+
+    await UserProgress.updateOne(
+        { userId },
+        [
+            {
+                $set: {
+                    hearts: {
+                        $max: [0, { $subtract: ["$hearts", 1] }]
+                    }
+                }
+            }
+        ]
+    );
+    revalidatePath("/learn");
+    revalidatePath("/shop")
+    revalidatePath("/quests")
+    revalidatePath("/leaderboard")
+    // revalidatePath(`/lesson/${lessonId}`)
 }
