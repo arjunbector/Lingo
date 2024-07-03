@@ -20,13 +20,13 @@ const List = ({ courses, activeCourseId }: Props) => {
     if (id === activeCourseId) return router.push("/learn");
     startTransition(() => {
       upsertUserProgress(id).catch(() => {
-        router.push("/")
+        router.push("/");
         toast.error("Something went wrong.");
       });
     });
   };
   return (
-    <div className="lt-6 grid grid-cols-2 gap-4 lg:grid-cols-[repeat(auto-fill,minmax(210px,1fr))]">
+    <div className="lt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(210px,1fr))]">
       {courses.map((course) => (
         <Card
           key={course._id}
