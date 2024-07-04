@@ -13,6 +13,9 @@ import {
 } from "../courses/queries";
 import Promo from "@/components/Promo";
 import Quests from "@/components/Quests";
+import { Button, buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const Page = async () => {
   const userProgressData = getUserProgress();
@@ -49,8 +52,11 @@ const Page = async () => {
           <h1 className="my-6 text-center text-2xl font-bold uppercase text-neutral-800">
             Leaderboard
           </h1>
-          <p className="mb-6 max-w-prose text-center text-lg text-muted-foreground">
+          <p className="max-w-prose text-center text-lg text-muted-foreground">
             See where you stand among other learners in the community.
+          </p>
+          <p className="mb-6 max-w-prose text-center text-lg text-muted-foreground">
+            Earn more points to climb up the leaderboard.
           </p>
           <Separator className="mb-4 h-0.5 rounded-full" />
           {leaderboard.map((userProgress, index) => (
@@ -65,15 +71,36 @@ const Page = async () => {
                 <AvatarImage
                   src={userProgress.userImageSrc}
                   className="object-cover"
-                  
                 />
                 <AvatarFallback>
-                  <Image src="/profile-placeholder.jpg" alt="profile-pic"height={70} width={70} className="object-cover"/>
+                  <Image
+                    src="/profile-placeholder.jpg"
+                    alt="profile-pic"
+                    height={70}
+                    width={70}
+                    className="object-cover"
+                  />
                 </AvatarFallback>
               </Avatar>
               <p className="flex-1 font-bold text-neutral-800">
-                {userProgress.userName}
-              </p>
+                  {userProgress.userName}
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: "ghost",
+                      }),
+                    )}
+                    href="/courses"
+                  >
+                    <Image
+                      src={`/flags/${userProgress.activeCourse.imageSrc}`}
+                      alt={userProgress.activeCourse.title}
+                      className="inline-block rounded-md border"
+                      width={25}
+                      height={25}
+                    />
+                  </Link>
+                </p>
               <p className="text-muted-foreground">{userProgress.points} XP</p>
             </div>
           ))}
@@ -92,6 +119,22 @@ const Page = async () => {
                 </Avatar>
                 <p className="flex-1 font-bold text-neutral-800">
                   {userProgress.userName}
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: "ghost",
+                      }),
+                    )}
+                    href="/courses"
+                  >
+                    <Image
+                      src={`/flags/${userProgress.activeCourse.imageSrc}`}
+                      alt={userProgress.activeCourse.title}
+                      className="inline-block rounded-md border"
+                      width={25}
+                      height={25}
+                    />
+                  </Link>
                 </p>
                 <p className="text-muted-foreground">
                   {userProgress.points} XP

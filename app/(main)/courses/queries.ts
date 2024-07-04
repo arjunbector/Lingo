@@ -21,6 +21,8 @@ export const getUserProgress = cache(async () => {
         const course = await Course.findById(data.activeCourseId).select("title imageSrc");
         data.activeCourse = course;
     }
+    const course = await Course.findById(data.activeCourseId);
+    data.activeCourse = course;
     return data;
 })
 
@@ -195,15 +197,18 @@ export const getTopTenUsers = cache(async () => {
     if (!userId) return [];
     const data = await UserProgress.find().sort({ points: -1 });
     const topTen = data.slice(0, 10);
-    console.log("Top ten: ", topTen);
-    return topTen;
+    const courses = Course.find();
+    const topTenWithCourses = await Promise.all(topTen.map(async (user) => {
+        const course = await Course.findById(user.activeCourseId);
+        return { ...user.toObject(), activeCourse: course }
+    }))
+    return topTenWithCourses;
 })
 
 export const getUserRank = cache(async () => {
     const { userId } = await auth();
     if (!userId) return -1;
     const allUsers = await UserProgress.find().sort({ points: -1 });
-    console.log(allUsers);
     const userRank = allUsers.findIndex(user => user.userId === userId);
     return userRank + 1
 })

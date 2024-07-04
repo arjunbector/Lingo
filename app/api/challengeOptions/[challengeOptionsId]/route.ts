@@ -21,6 +21,6 @@ export const PUT = async (req: Request, { params }: { params: { challengeOptions
 export const DELETE = async (req: Request, { params }: { params: { challengeOptionsId: string } }) => {
     if (!isAdmin()) return new NextResponse("Unauthorized", { status: 401 });
     await connectToDB();
-    const challengeOption = await ChallengeOptions.findByIdAndDelete(params.challengeOptionsId);
+    const challengeOption = await ChallengeOptions.findByIdAndDelete(params.chalwlengeOptionsId);
     return NextResponse.json({ ...challengeOption, id: challengeOption._id })
 }
