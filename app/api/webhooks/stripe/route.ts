@@ -1,3 +1,4 @@
+import connectToDB from "@/db/db";
 import { stripe } from "@/lib/stripe";
 import { UserSubscription } from "@/models/userSubscription.model";
 import { headers } from "next/headers";
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
         if (!session?.metadata?.userId) {
             return new NextResponse("User ID is required", { status: 400 })
         }
+        await connectToDB();
         await UserSubscription.create({
             userId: session.metadata.userId,
             stripeSubscriptionId: subscription.id,
@@ -41,6 +43,7 @@ export async function POST(req: Request) {
         const subscription = await stripe.subscriptions.retrieve(
             session.subscription as string
         )
+        await connectToDB();
         await UserSubscription.updateOne({ stripeSubscriptionId: subscription.id }, {
             stripePriceId: subscription.items.data[0].price.id,
             stripeCurrentPeriodEnd: new Date(
