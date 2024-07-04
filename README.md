@@ -19,7 +19,7 @@
 
 ## About
 
-Case Cobra is software as service which helps the users to learn multiple languages online with bite-size lessons based on science.
+Lingo is a language learning platform that uses spaced repetition to help users learn new languages. The app provides a seamless learning experience with a clean and intuitive UI.
 
 ## Getting Started
 
