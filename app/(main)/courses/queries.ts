@@ -191,8 +191,19 @@ export const getUserSubscription = cache(async () => {
 })
 
 export const getTopTenUsers = cache(async () => {
-    const {userId} = await auth();
-    if(!userId) return [];
-    const data = await UserProgress.find().sort({ points: -1 }).limit(10);
-    return data;
+    const { userId } = await auth();
+    if (!userId) return [];
+    const data = await UserProgress.find().sort({ points: -1 });
+    const topTen = data.slice(0, 10);
+    console.log("Top ten: ", topTen);
+    return topTen;
+})
+
+export const getUserRank = cache(async () => {
+    const { userId } = await auth();
+    if (!userId) return -1;
+    const allUsers = await UserProgress.find().sort({ points: -1 });
+    console.log(allUsers);
+    const userRank = allUsers.findIndex(user => user.userId === userId);
+    return userRank + 1
 })

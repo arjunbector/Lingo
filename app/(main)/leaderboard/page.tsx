@@ -1,13 +1,14 @@
 import FeedWrapper from "@/components/FeedWrapper";
 import StickyWrapper from "@/components/StickyWrapper";
 import UserProgress from "@/components/UserProgress";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import {
   getTopTenUsers,
   getUserProgress,
+  getUserRank,
   getUserSubscription,
 } from "../courses/queries";
 import Promo from "@/components/Promo";
@@ -17,12 +18,15 @@ const Page = async () => {
   const userProgressData = getUserProgress();
   const userSubscriptionData = getUserSubscription();
   const leaderboardData = getTopTenUsers();
+  const userRankData = getUserRank();
 
-  const [userProgress, userSubscription, leaderboard] = await Promise.all([
-    userProgressData,
-    userSubscriptionData,
-    leaderboardData,
-  ]);
+  const [userProgress, userSubscription, leaderboard, userRank] =
+    await Promise.all([
+      userProgressData,
+      userSubscriptionData,
+      leaderboardData,
+      userRankData,
+    ]);
   if (!userProgress || !userProgress.activeCourse) {
     redirect("/courses");
   }
@@ -37,7 +41,7 @@ const Page = async () => {
           hasActiveSubscription={isPro}
         />
         {!isPro && <Promo />}
-        <Quests points={userProgress?.points}/>
+        <Quests points={userProgress?.points} />
       </StickyWrapper>
       <FeedWrapper>
         <div className="mt-6 flex w-full flex-col items-center">
@@ -54,12 +58,18 @@ const Page = async () => {
               key={userProgress.userId}
               className="flex w-full items-center rounded-xl p-2 px-4 hover:bg-gray-200/50"
             >
-              <p className="mr-4 font-bold text-lime-700">{index + 1}</p>
+              <p className="mr-4 w-3 text-right font-bold text-lime-700">
+                {index + 1}
+              </p>
               <Avatar className="ml-3 mr-6 h-12 w-12 border bg-green-500">
                 <AvatarImage
                   src={userProgress.userImageSrc}
                   className="object-cover"
+                  
                 />
+                <AvatarFallback>
+                  <Image src="/profile-placeholder.jpg" alt="profile-pic"height={70} width={70} className="object-cover"/>
+                </AvatarFallback>
               </Avatar>
               <p className="flex-1 font-bold text-neutral-800">
                 {userProgress.userName}
@@ -67,6 +77,28 @@ const Page = async () => {
               <p className="text-muted-foreground">{userProgress.points} XP</p>
             </div>
           ))}
+          {userRank > 10 && (
+            <>
+              <Separator className="h-0.5 rounded-full" />
+              <div className="flex w-full items-center rounded-xl p-2 px-4 hover:bg-gray-200/50">
+                <p className="mr-4 w-3 text-right font-bold text-lime-700">
+                  {userRank}
+                </p>
+                <Avatar className="ml-3 mr-6 h-12 w-12 border bg-green-500">
+                  <AvatarImage
+                    src={userProgress.userImageSrc}
+                    className="object-cover"
+                  />
+                </Avatar>
+                <p className="flex-1 font-bold text-neutral-800">
+                  {userProgress.userName}
+                </p>
+                <p className="text-muted-foreground">
+                  {userProgress.points} XP
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </FeedWrapper>
     </main>
