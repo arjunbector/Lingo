@@ -21,8 +21,11 @@ export const getUserProgress = cache(async () => {
         const course = await Course.findById(data.activeCourseId).select("title imageSrc");
         data.activeCourse = course;
     }
-    const course = await Course.findById(data.activeCourseId);
-    data.activeCourse = course;
+    const course = await Course.findById(data?.activeCourseId);
+    if (course) {
+        data.activeCourse = course;
+        return data;
+    }
     return data;
 })
 
