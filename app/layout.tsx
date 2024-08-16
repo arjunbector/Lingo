@@ -7,6 +7,7 @@ import ExitModal from "@/components/modals/exit-modal";
 import HeartsModal from "@/components/modals/hearts-modal";
 import PracticeModal from "@/components/modals/practice-modal.tsx";
 import { constructMetadata } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/react"
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <HeartsModal />
           <ExitModal />
           {children}
+          <Analytics/>
         </body>
       </html>
     </ClerkProvider>
